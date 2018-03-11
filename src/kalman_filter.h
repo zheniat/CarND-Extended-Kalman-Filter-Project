@@ -1,6 +1,9 @@
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
+#define _USE_MATH_DEFINES
+
 #include "Eigen/Dense"
+#include <cmath>
 
 class KalmanFilter {
 public:
@@ -64,6 +67,8 @@ public:
    */
   void UpdateEKF(const Eigen::VectorXd &z);
 
+private:
+  void UpdateUsingY(const Eigen::VectorXd &y);
 };
 
 #endif /* KALMAN_FILTER_H_ */

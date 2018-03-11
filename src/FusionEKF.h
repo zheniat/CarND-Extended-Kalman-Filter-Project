@@ -43,7 +43,10 @@ private:
   Eigen::MatrixXd R_laser_;
   Eigen::MatrixXd R_radar_;
   Eigen::MatrixXd H_laser_;
-  Eigen::MatrixXd Hj_;
+
+  //laser measurement noise parameters
+  const float noise_ax = 9;
+  const float noise_ay = 9;
 };
 
 #endif /* FusionEKF_H_ */

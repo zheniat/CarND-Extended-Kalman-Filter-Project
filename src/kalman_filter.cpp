@@ -2,6 +2,8 @@
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using namespace std;
+
 
 // Please note that the Eigen library does not initialize 
 // VectorXd or MatrixXd objects with zeros upon creation.
@@ -21,22 +23,62 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
-  /**
-  TODO:
-    * predict the state
-  */
+  x_ = F_ * x_;
+  MatrixXd Ft = F_.transpose();
+  P_ = F_ * P_ * Ft + Q_;
+}
+
+void KalmanFilter::UpdateUsingY(const VectorXd &y){
+  MatrixXd Ht = H_.transpose();
+  MatrixXd S = H_ * P_ * Ht + R_;
+  MatrixXd Si = S.inverse();
+  MatrixXd PHt = P_ * Ht;
+  MatrixXd K = PHt * Si;
+
+  //new estimate
+  x_ = x_ + (K * y);
+  long x_size = x_.size();
+  MatrixXd I = MatrixXd::Identity(x_size, x_size); // @suppress("Invalid arguments")
+  P_ = (I - K * H_) * P_;
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Kalman Filter equations
-  */
+  VectorXd z_pred = H_ * x_;
+  VectorXd y = z - z_pred;
+  UpdateUsingY(y);
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Extended Kalman Filter equations
-  */
-}
+  float px = x_(0);
+  float py = x_(1);
+  float vx = x_(2);
+  float vy = x_(3);
+
+  //Fix small values
+  if(fabs(px) < 0.0001){
+    px = 0.0001;
+  }
+  if(fabs(py) < 0.0001){
+    py = 0.0001;
+  }
+
+  VectorXd z_pred = VectorXd(3);
+
+  float rho  = sqrt(pow(px,2)+pow(py,2));
+  float theta = atan2(py,px);
+  float rho_dot = 0;
+  if(px != 0 && py != 0){
+      rho_dot = (px*vx+py*vy)/sqrt(pow(px,2)+pow(py,2));
+  }
+  z_pred << rho, theta, rho_dot;
+
+  VectorXd y = z - z_pred;
+
+  //normalize theta to be between -pi and pi
+  double twoPi = 2 * M_PI;
+  double corr = (y(1) + M_PI) /twoPi;
+  corr = y(1) - twoPi * floor(corr);
+  y(1) = corr;
+
+  UpdateUsingY(y);
+ }

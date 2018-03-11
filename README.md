@@ -4,6 +4,7 @@ Self-Driving Car Engineer Nanodegree Program @ udacity.com
 [//]: # (Image References)
 [image1]: ./media/ekf.png
 [image2]: ./media/ekf2.png
+[image3]: ./media/ekf3.png
 
 This project uses a Kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Extended Kalman filter algorithm is used to process radar data.
 
@@ -27,3 +28,5 @@ Examples of algorithm performance. Lidar measurements are red circles, radar mea
 ![alt text][image1]
 
 ![alt text][image2]
+
+![alt text][image3]

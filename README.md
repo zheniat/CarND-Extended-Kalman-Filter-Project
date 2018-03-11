@@ -25,8 +25,8 @@ OUTPUT: values provided by the c++ program to the simulator
 ## Sample Output
 Examples of algorithm performance. Lidar measurements are red circles, radar measurements are blue circles with an arrow pointing in the direction of the observed angle, and estimation markers are green triangles.
 
+![alt text][image3]
+
 ![alt text][image1]
 
 ![alt text][image2]
-
-![alt text][image3]

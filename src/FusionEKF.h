@@ -45,8 +45,8 @@ private:
   Eigen::MatrixXd H_laser_;
 
   //laser measurement noise parameters
-  const float noise_ax = 9;
-  const float noise_ay = 9;
+  const double noise_ax = 9.0;
+  const double noise_ay = 9.0;
 };
 
 #endif /* FusionEKF_H_ */
